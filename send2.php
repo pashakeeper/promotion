@@ -25,22 +25,32 @@ echo '
 
 
 
-$to = 'asicfoxbtc@gmail.com';
-$subject = 'Розіграш Гаманців';
-$message = '
-                <html>
-                    <head>
-                        <title>' . $subject . '</title>
-                    </head>
-                    <body>
-                        <p>Имя: ' . $_POST['name'] . '</p>
-                        <p>Номер телефона: ' . $_POST['phone'] . '</p>
-                        <p>Телеграм: @' . $_POST['nickname'] . '</p>
-                        <p>Почта: ' . $_POST['email'] . '</p>
-                        <p>Какую модель покупали: ' . $_POST['model'] . '</p>
-                    </body>
-                </html>';
-$headers = "Content-type: text/html; charset=utf-8 \r\n";
-$headers .= "From: Отправитель <prize@form.com>\r\n";
-mail($to, $subject, $message, $headers);
+$servername = "asicfox.mysql.tools";
+$username = "asicfox_birthday";
+$password = "~ys8tD5U*3";
+$dbname = "asicfox_birthday";
+
+
+$name = $_POST['name'];
+$phone = $_POST['phone'];
+$nick = $_POST['nickname'];
+$mail = $_POST['email'];
+$model = $_POST['model'];
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "INSERT INTO wallet_request (username, userphone, usernick, email)
+VALUES ('$name', '$phone', '$nick', '$mail')";
+
+if ($conn->query($sql) === TRUE) {
+  echo "New record created successfully";
+} else {
+  echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+$conn->close();
 ?>
